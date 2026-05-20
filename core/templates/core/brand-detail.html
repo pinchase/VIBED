@@ -45,61 +45,82 @@
     </div>
 </section>
 
-<section class="section">
-    <div class="container content-grid">
+<section class="section brand-work-section {% if brand.client.is_global_trade %}brand-work-section-gt{% endif %}">
+    <div class="container content-grid {% if brand.client.is_global_trade %}gt-content-grid{% endif %}">
         <article class="case-narrative brand-narrative">
             {% if brand.client.is_global_trade %}
-                <section class="story-block story-feature">
-                    <span>01</span>
-                    <div>
-                        <h2>Execution Programs</h2>
-                        {% if programs %}
-                            <div class="program-list">
-                                {% for program in programs %}
-                                    <article class="program-entry">
-                                        <h3>{{ program.title }}</h3>
+                <section class="gt-programs">
+                    <div class="gt-programs-header">
+                        <p class="eyebrow">Execution</p>
+                        <h2>Program work history</h2>
+                    </div>
 
+                    {% if programs %}
+                        <div class="program-list">
+                            {% for program in programs %}
+                                <article class="program-card">
+                                    <div class="program-card-header">
+                                        <span aria-hidden="true">📌</span>
+                                        <h3>{{ program.title }}</h3>
+                                    </div>
+
+                                    <div class="program-card-body">
                                         {% if program.program_plan %}
-                                            <div>
-                                                <h4>Program Plan</h4>
+                                            <section class="program-card-row">
+                                                <div class="program-card-label">
+                                                    <span aria-hidden="true">🗂️</span>
+                                                    <h4>Program Plan</h4>
+                                                </div>
                                                 <p>{{ program.program_plan }}</p>
-                                            </div>
+                                            </section>
                                         {% endif %}
 
                                         {% if program.customer_reach %}
-                                            <div>
-                                                <h4>Customer Reach</h4>
+                                            <section class="program-card-row">
+                                                <div class="program-card-label">
+                                                    <span aria-hidden="true">👥</span>
+                                                    <h4>Customer Reach</h4>
+                                                </div>
                                                 <p>{{ program.customer_reach }}</p>
-                                            </div>
+                                            </section>
                                         {% endif %}
 
                                         {% if program.objective %}
-                                            <div>
-                                                <h4>Objective</h4>
+                                            <section class="program-card-row">
+                                                <div class="program-card-label">
+                                                    <span aria-hidden="true">🎯</span>
+                                                    <h4>Objective</h4>
+                                                </div>
                                                 <p>{{ program.objective }}</p>
-                                            </div>
+                                            </section>
                                         {% endif %}
 
                                         {% if program.execution_strategy %}
-                                            <div>
-                                                <h4>Execution Strategy</h4>
+                                            <section class="program-card-row">
+                                                <div class="program-card-label">
+                                                    <span aria-hidden="true">⚙️</span>
+                                                    <h4>Execution Strategy</h4>
+                                                </div>
                                                 <p>{{ program.execution_strategy }}</p>
-                                            </div>
+                                            </section>
                                         {% endif %}
 
                                         {% if program.achievement %}
-                                            <div>
-                                                <h4>Achievement</h4>
+                                            <section class="program-card-row program-card-row-success">
+                                                <div class="program-card-label">
+                                                    <span aria-hidden="true">✅</span>
+                                                    <h4>Achievement</h4>
+                                                </div>
                                                 <p>{{ program.achievement }}</p>
-                                            </div>
+                                            </section>
                                         {% endif %}
-                                    </article>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="empty-state">No execution programs have been added for this Global Trade brand yet.</p>
-                        {% endif %}
-                    </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="empty-state">No execution programs have been added for this Global Trade brand yet.</p>
+                    {% endif %}
                 </section>
             {% else %}
                 {% if brand.objective %}
