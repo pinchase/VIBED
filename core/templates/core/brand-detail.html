@@ -56,28 +56,35 @@
                     </div>
 
                     {% if programs %}
-                        <div class="program-list">
+                        <div class="program-carousel" aria-label="{{ brand.name }} execution programs">
                             {% for program in programs %}
                                 <article class="program-card">
-                                    <div class="program-card-header">
-                                        <span aria-hidden="true">📌</span>
-                                        <h3>{{ program.title }}</h3>
+                                    <div class="program-card-top">
+                                        <div class="program-card-title">
+                                            <span aria-hidden="true">📌</span>
+                                            <h3>{{ program.title }}</h3>
+                                        </div>
+                                        <div class="program-meta">
+                                            <span>Program {{ forloop.counter|stringformat:"02d" }}</span>
+                                            <span>{{ brand.client.get_channel_display }}</span>
+                                            <span>{{ brand.client.name }}</span>
+                                        </div>
                                     </div>
 
-                                    <div class="program-card-body">
-                                        {% if program.program_plan %}
-                                            <section class="program-card-row">
-                                                <div class="program-card-label">
-                                                    <span aria-hidden="true">🗂️</span>
-                                                    <h4>Program Plan</h4>
-                                                </div>
-                                                <p>{{ program.program_plan }}</p>
-                                            </section>
-                                        {% endif %}
+                                    {% if program.program_plan %}
+                                        <div class="program-overview">
+                                            <div class="program-mini-heading">
+                                                <span aria-hidden="true">🧭</span>
+                                                <h4>Program Plan</h4>
+                                            </div>
+                                            <p>{{ program.program_plan }}</p>
+                                        </div>
+                                    {% endif %}
 
+                                    <div class="program-mini-grid">
                                         {% if program.customer_reach %}
-                                            <section class="program-card-row">
-                                                <div class="program-card-label">
+                                            <section class="program-mini-card">
+                                                <div class="program-mini-heading">
                                                     <span aria-hidden="true">👥</span>
                                                     <h4>Customer Reach</h4>
                                                 </div>
@@ -86,8 +93,8 @@
                                         {% endif %}
 
                                         {% if program.objective %}
-                                            <section class="program-card-row">
-                                                <div class="program-card-label">
+                                            <section class="program-mini-card">
+                                                <div class="program-mini-heading">
                                                     <span aria-hidden="true">🎯</span>
                                                     <h4>Objective</h4>
                                                 </div>
@@ -96,9 +103,9 @@
                                         {% endif %}
 
                                         {% if program.execution_strategy %}
-                                            <section class="program-card-row">
-                                                <div class="program-card-label">
-                                                    <span aria-hidden="true">⚙️</span>
+                                            <section class="program-mini-card">
+                                                <div class="program-mini-heading">
+                                                    <span aria-hidden="true">⚡</span>
                                                     <h4>Execution Strategy</h4>
                                                 </div>
                                                 <p>{{ program.execution_strategy }}</p>
@@ -106,9 +113,9 @@
                                         {% endif %}
 
                                         {% if program.achievement %}
-                                            <section class="program-card-row program-card-row-success">
-                                                <div class="program-card-label">
-                                                    <span aria-hidden="true">✅</span>
+                                            <section class="program-mini-card program-mini-card-success">
+                                                <div class="program-mini-heading">
+                                                    <span aria-hidden="true">🏆</span>
                                                     <h4>Achievement</h4>
                                                 </div>
                                                 <p>{{ program.achievement }}</p>
