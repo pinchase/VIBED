@@ -839,6 +839,35 @@ blockquote {
     font-size: clamp(1.65rem, 2.5vw, 2.35rem);
 }
 
+.program-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.program-entry {
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+}
+
+.program-entry h3 {
+    margin-bottom: 1rem;
+}
+
+.program-entry h4 {
+    margin: 1rem 0 0.35rem;
+    color: var(--brand-strong);
+    font-size: 0.82rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.program-entry p {
+    margin: 0;
+}
+
 .brand-gallery .gallery-item:nth-child(1) {
     grid-column: span 2;
     grid-row: span 2;

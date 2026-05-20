@@ -24,6 +24,7 @@
                         </div>
                         <div>
                             <h2>{{ client.name }}</h2>
+                            <span class="eyebrow">{{ client.get_channel_display }}</span>
                             {% if client.caption %}
                                 <p>{{ client.caption }}</p>
                             {% elif client.description %}

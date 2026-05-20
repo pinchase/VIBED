@@ -21,8 +21,21 @@ def unique_slug_for(instance, value, *, scope=None):
 
 
 class Client(models.Model):
+    MODERN_TRADE = 'modern_trade'
+    GLOBAL_TRADE = 'global_trade'
+    CHANNEL_CHOICES = [
+        (MODERN_TRADE, 'Modern Trade'),
+        (GLOBAL_TRADE, 'Global Trade'),
+    ]
+
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True, max_length=200, help_text="URL slug (auto-generated if not provided)")
+    channel = models.CharField(
+        max_length=20,
+        choices=CHANNEL_CHOICES,
+        default=MODERN_TRADE,
+        help_text="Select whether this client belongs to Modern Trade or Global Trade"
+    )
     logo = models.ImageField(upload_to='client_logos/', blank=True, null=True, help_text="Client company logo shown on the homepage and clients page")
     caption = models.TextField(blank=True, help_text="Short line describing what the client company does")
     description = models.TextField(blank=True, null=True)
@@ -43,6 +56,10 @@ class Client(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def is_global_trade(self):
+        return self.channel == self.GLOBAL_TRADE
+
     def save(self, *args, **kwargs):
         """Auto-generate slug from name if not provided"""
         if not self.slug:
@@ -57,7 +74,7 @@ class Brand(models.Model):
     logo = models.ImageField(upload_to='brand_logos/')
     caption = models.TextField(blank=True, help_text="Short brand summary shown on client pages")
     objective = models.TextField(blank=True, help_text="Brand objective or campaign brief")
-    execution = models.TextField(blank=True, help_text="How the brand work was executed")
+    # execution = models.TextField(blank=True, help_text="How the brand work was executed")
     outcome = models.TextField(blank=True, help_text="Outcome or achievement from the brand work")
     order = models.PositiveIntegerField(default=0, help_text="Display priority order")
     is_active = models.BooleanField(default=True)
@@ -76,6 +93,27 @@ class Brand(models.Model):
         if not self.slug:
             self.slug = unique_slug_for(self, f"{self.client.name} {self.name}")
         super().save(*args, **kwargs)
+
+
+class BrandProgram(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='programs')
+    title = models.CharField(max_length=200, help_text="Program name or activity title")
+    program_plan = models.TextField(blank=True, help_text="Plan for this Global Trade program")
+    customer_reach = models.TextField(blank=True, help_text="Customer reach for this program")
+    objective = models.TextField(blank=True, help_text="Objective for this program")
+    execution_strategy = models.TextField(blank=True, help_text="Execution strategy for this program")
+    achievement = models.TextField(blank=True, help_text="Achievement or result for this program")
+    order = models.PositiveIntegerField(default=0, help_text="Display priority order")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'title']
+        verbose_name = "Brand Program"
+        verbose_name_plural = "Brand Programs"
+
+    def __str__(self):
+        return f"{self.brand.name} - {self.title}"
 
 
 class BrandImage(models.Model):
@@ -190,4 +228,3 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return f"{self.client_name} - {self.company}"
-

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client, Brand, BrandImage, Testimonial
+from .models import Client, Brand, BrandProgram, BrandImage, Testimonial
 from django.utils.html import format_html
 
 admin.site.site_header = "Braymells Admin Portal"
@@ -15,15 +15,15 @@ class BrandInline(admin.TabularInline):
     
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ['name', 'logo_preview', 'caption', 'is_active', 'created_at']
-    list_filter = ['is_active', 'created_at']
+    list_display = ['name', 'channel', 'logo_preview', 'caption', 'is_active', 'created_at']
+    list_filter = ['channel', 'is_active', 'created_at']
     search_fields = ['name', 'caption', 'description', 'work_done']
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['created_at', 'updated_at']
     inlines = [BrandInline]
     fieldsets = (
         ('Client Information', {
-            'fields': ('name', 'slug', 'logo', 'caption', 'description')
+            'fields': ('name', 'slug', 'channel', 'logo', 'caption', 'description')
         }),
         ('Client Work Story', {
             'fields': ('objective', 'stores_activated', 'team_size', 'work_done', 'achievement')
@@ -55,20 +55,30 @@ class BrandImageInline(admin.TabularInline):
     ordering = ['order']
 
 
+class BrandProgramInline(admin.StackedInline):
+    model = BrandProgram
+    extra = 1
+    fields = [
+        'title', 'program_plan', 'customer_reach', 'objective',
+        'execution_strategy', 'achievement', 'order', 'is_active'
+    ]
+    ordering = ['order']
+
+
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ['name', 'client','logo_preview', 'order', 'is_active', 'created_at']
-    list_filter = ['client', 'is_active', 'created_at']
+    list_display = ['name', 'client', 'client_channel', 'logo_preview', 'order', 'is_active', 'created_at']
+    list_filter = ['client__channel', 'client', 'is_active', 'created_at']
     search_fields = ['name', 'caption', 'client__name']
     ordering = ['order', 'name']
     readonly_fields = ['created_at']
-    inlines = [BrandImageInline]
+    inlines = [BrandProgramInline, BrandImageInline]
     fieldsets = (
         ('Brand Information', {
             'fields': ('client', 'name', 'slug', 'logo', 'caption')
         }),
         ('Brand Work Story', {
-            'fields': ('objective', 'execution', 'outcome')
+            'fields': ('objective', 'outcome')
         }),
         ('Display Settings', {
             'fields': ('order', 'is_active')
@@ -87,6 +97,40 @@ class BrandAdmin(admin.ModelAdmin):
         return "No Image"
 
     logo_preview.short_description = "Logo Preview"
+
+    def client_channel(self, obj):
+        return obj.client.get_channel_display()
+
+    client_channel.short_description = "Channel"
+
+
+@admin.register(BrandProgram)
+class BrandProgramAdmin(admin.ModelAdmin):
+    list_display = ['title', 'brand', 'client_name', 'order', 'is_active', 'created_at']
+    list_filter = ['is_active', 'brand__client', 'brand', 'created_at']
+    search_fields = ['title', 'brand__name', 'brand__client__name', 'program_plan', 'customer_reach']
+    ordering = ['brand', 'order', 'title']
+    readonly_fields = ['created_at']
+    fieldsets = (
+        ('Program Information', {
+            'fields': ('brand', 'title')
+        }),
+        ('Program Entry', {
+            'fields': ('program_plan', 'customer_reach', 'objective', 'execution_strategy', 'achievement')
+        }),
+        ('Display Settings', {
+            'fields': ('order', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def client_name(self, obj):
+        return obj.brand.client.name
+
+    client_name.short_description = "Client"
 
 
 @admin.register(BrandImage)

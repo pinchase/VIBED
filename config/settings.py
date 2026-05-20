@@ -179,52 +179,64 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # API Versioning
 API_VERSION = 'v1'
-
 JAZZMIN_SETTINGS = {
     "site_title": "Braymell Admin",
     "site_header": "Braymell Dashboard",
     "site_brand": "Braymell",
     "welcome_sign": "Welcome to Braymell Admin Dashboard",
     "copyright": "Braymell TradeMasters LTD",
-    
+
     "site_logo": "images/logo.jpeg",
     "login_logo": "images/logo.jpeg",
     "site_icon": "images/logo.jpeg",
-    
+
     "search_model": "core.Project",
-    
+
     "user_avatar": None,
-    
+
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.add_user"]},
         {"name": "API Docs", "url": "/api/docs/", "new_window": True},
     ],
-    
+
     "usersidebar_links": [
         {"name": "View Site", "url": "/", "new_window": True},
     ],
-    
+
     "icons": {
-    "auth": "fas fa-users-cog",
-    "auth.Group": "fas fa-user-shield",
-    "auth.user": "fas fa-user",
-    "core.project": "fas fa-briefcase",
-    "core.projectimage": "fas fa-images",
-    "core.testimonial": "fas fa-comment-dots",
-    "core.clientlogo": "fas fa-handshake",
-    "core.brand": "fas fa-tags",
-    "core.client": "fas fa-building-user",
-},
-    
+        "auth": "fas fa-users-cog",
+        "auth.Group": "fas fa-user-shield",
+        "auth.user": "fas fa-user",
+
+        "core.project": "fas fa-briefcase",
+        "core.projectimage": "fas fa-images",
+
+        "core.testimonial": "fas fa-comment-dots",
+        "core.clientlogo": "fas fa-handshake",
+
+        "core.client": "fas fa-building-user",
+
+        # Brands
+        "core.brand": "fas fa-tags",
+
+        # Brand Images
+        "core.brandimage": "fas fa-image",
+
+        # Brand Programs
+        "core.brandprogram": "fas fa-bullhorn",
+    },
+
     "default_icon_parents": "fas fa-chevron-right",
     "default_icon_children": "fas fa-arrow-right",
-    
+
     "related_modal_active": True,
-    
+
     "changeform_format": "single",
+
     "changeform_format_overrides": {
         "core.project": "collapsible",
         "auth.user": "horizontal_tabs",
+        "core.brandprogram": "collapsible",
     },
 }
 

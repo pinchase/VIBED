@@ -23,6 +23,10 @@
                         <dt>Client</dt>
                         <dd>{{ brand.client.name }}</dd>
                     </div>
+                    <div>
+                        <dt>Channel</dt>
+                        <dd>{{ brand.client.get_channel_display }}</dd>
+                    </div>
                     {% if brand.client.stores_activated %}
                         <div>
                             <dt>Activation Footprint</dt>
@@ -44,34 +48,89 @@
 <section class="section">
     <div class="container content-grid">
         <article class="case-narrative brand-narrative">
-            {% if brand.objective %}
+            {% if brand.client.is_global_trade %}
                 <section class="story-block story-feature">
                     <span>01</span>
                     <div>
-                        <h2>Objective</h2>
-                        <p>{{ brand.objective }}</p>
-                    </div>
-                </section>
-            {% endif %}
+                        <h2>Execution Programs</h2>
+                        {% if programs %}
+                            <div class="program-list">
+                                {% for program in programs %}
+                                    <article class="program-entry">
+                                        <h3>{{ program.title }}</h3>
 
-            {% if brand.execution %}
-                <section class="story-block story-feature">
-                    <span>02</span>
-                    <div>
-                        <h2>Execution</h2>
-                        <p>{{ brand.execution }}</p>
-                    </div>
-                </section>
-            {% endif %}
+                                        {% if program.program_plan %}
+                                            <div>
+                                                <h4>Program Plan</h4>
+                                                <p>{{ program.program_plan }}</p>
+                                            </div>
+                                        {% endif %}
 
-            {% if brand.outcome %}
-                <section class="story-block story-feature">
-                    <span>03</span>
-                    <div>
-                        <h2>Outcome</h2>
-                        <p>{{ brand.outcome }}</p>
+                                        {% if program.customer_reach %}
+                                            <div>
+                                                <h4>Customer Reach</h4>
+                                                <p>{{ program.customer_reach }}</p>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if program.objective %}
+                                            <div>
+                                                <h4>Objective</h4>
+                                                <p>{{ program.objective }}</p>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if program.execution_strategy %}
+                                            <div>
+                                                <h4>Execution Strategy</h4>
+                                                <p>{{ program.execution_strategy }}</p>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if program.achievement %}
+                                            <div>
+                                                <h4>Achievement</h4>
+                                                <p>{{ program.achievement }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="empty-state">No execution programs have been added for this Global Trade brand yet.</p>
+                        {% endif %}
                     </div>
                 </section>
+            {% else %}
+                {% if brand.objective %}
+                    <section class="story-block story-feature">
+                        <span>01</span>
+                        <div>
+                            <h2>Objective</h2>
+                            <p>{{ brand.objective }}</p>
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% if brand.execution %}
+                    <section class="story-block story-feature">
+                        <span>02</span>
+                        <div>
+                            <h2>Execution</h2>
+                            <p>{{ brand.execution }}</p>
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% if brand.outcome %}
+                    <section class="story-block story-feature">
+                        <span>03</span>
+                        <div>
+                            <h2>Outcome</h2>
+                            <p>{{ brand.outcome }}</p>
+                        </div>
+                    </section>
+                {% endif %}
             {% endif %}
         </article>
     </div>

@@ -94,11 +94,13 @@ class BrandDetailView(View):
     def get(self, request, slug):
         brand = get_object_or_404(Brand, slug=slug, is_active=True, client__is_active=True)
         images = BrandImage.objects.filter(brand=brand)
+        programs = brand.programs.filter(is_active=True).order_by('order', 'title')
         related_brands = brand.client.brands.filter(is_active=True).exclude(pk=brand.pk).order_by('order', 'name')
 
         context = {
             'brand': brand,
             'images': images,
+            'programs': programs,
             'related_brands': related_brands,
             'page_title': f'{brand.name} - Braymell Brand Work',
         }

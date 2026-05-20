@@ -19,6 +19,10 @@
                     <img src="{{ client.logo.url }}" alt="{{ client.name }}" loading="lazy">
                 {% endif %}
                 <dl>
+                    <div>
+                        <dt>Channel</dt>
+                        <dd>{{ client.get_channel_display }}</dd>
+                    </div>
                     {% if client.stores_activated %}
                         <div>
                             <dt>Activation Footprint</dt>
