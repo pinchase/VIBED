@@ -119,6 +119,49 @@ document.addEventListener("DOMContentLoaded", () => {
         revealObserver.observe(el);
     });
 
+    /* ── Program carousel controls ─────────────────────────── */
+    document.querySelectorAll("[data-program-section]").forEach((section) => {
+        const carousel = section.querySelector("[data-program-carousel]");
+        const prevButton = section.querySelector("[data-program-prev]");
+        const nextButton = section.querySelector("[data-program-next]");
+        const status = section.querySelector("[data-program-status]");
+        if (!carousel || !prevButton || !nextButton || !status) return;
+
+        const cards = Array.from(carousel.querySelectorAll(".program-card"));
+        if (cards.length === 0) return;
+
+        const getActiveIndex = () => {
+            const carouselLeft = carousel.getBoundingClientRect().left;
+            return cards.reduce((closestIndex, card, index) => {
+                const currentDistance = Math.abs(card.getBoundingClientRect().left - carouselLeft);
+                const closestDistance = Math.abs(cards[closestIndex].getBoundingClientRect().left - carouselLeft);
+                return currentDistance < closestDistance ? index : closestIndex;
+            }, 0);
+        };
+
+        const updateCarouselState = () => {
+            const activeIndex = getActiveIndex();
+            status.textContent = `Program ${activeIndex + 1} of ${cards.length}`;
+            prevButton.disabled = activeIndex === 0;
+            nextButton.disabled = activeIndex === cards.length - 1;
+        };
+
+        const scrollToCard = (index) => {
+            const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
+            cards[targetIndex].scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "start",
+            });
+        };
+
+        prevButton.addEventListener("click", () => scrollToCard(getActiveIndex() - 1));
+        nextButton.addEventListener("click", () => scrollToCard(getActiveIndex() + 1));
+        carousel.addEventListener("scroll", () => window.requestAnimationFrame(updateCarouselState), { passive: true });
+        window.addEventListener("resize", updateCarouselState, { passive: true });
+        updateCarouselState();
+    });
+
     /* ── Back to top ─────────────────────────────────────── */
     const backTop = document.getElementById("back-top");
     if (backTop) {

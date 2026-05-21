@@ -777,6 +777,14 @@ blockquote {
     padding: 1.5rem;
 }
 
+.brand-hero .brand-meta {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+}
+
 .detail-meta img {
     max-height: 92px;
     margin-bottom: 1.25rem;
@@ -787,9 +795,25 @@ blockquote {
 .brand-meta img {
     max-width: 220px;
     max-height: 120px;
-    padding: 0.85rem;
+}
+
+.brand-logo-frame {
+    display: inline-flex;
+    width: min(100%, 240px);
+    min-height: 118px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.35rem;
+    padding: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: var(--radius);
-    background: var(--paper);
+    background: rgba(255, 255, 255, 0.94);
+}
+
+.brand-logo-frame img {
+    margin: 0;
+    padding: 0;
+    background: transparent;
 }
 
 .detail-meta dl,
@@ -812,6 +836,16 @@ blockquote {
     margin: 0;
     color: var(--paper);
     font-weight: 800;
+}
+
+.brand-meta dl > div {
+    padding: 0.85rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.brand-meta dl > div:first-child {
+    border-top: 0;
+    padding-top: 0;
 }
 
 .content-grid {
@@ -859,6 +893,10 @@ blockquote {
 }
 
 .gt-programs-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
     margin-bottom: 1.75rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--line);
@@ -866,6 +904,52 @@ blockquote {
 
 .gt-programs-header h2 {
     margin-bottom: 0;
+}
+
+.program-carousel-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.program-carousel-controls > div {
+    display: inline-flex;
+    gap: 0.45rem;
+}
+
+.program-carousel-status {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.program-carousel-btn {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--deep);
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.program-carousel-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(12, 107, 130, 0.35);
+    background: var(--wash);
+}
+
+.program-carousel-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
 }
 
 .program-carousel {
@@ -1381,6 +1465,16 @@ blockquote {
     .story-block {
         grid-template-columns: 1fr;
         gap: 0.4rem;
+    }
+
+    .gt-programs-header,
+    .program-carousel-controls {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .program-carousel-controls {
+        gap: 0.6rem;
     }
 
     .program-card {

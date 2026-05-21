@@ -16,7 +16,9 @@
             </div>
             <aside class="detail-meta brand-meta">
                 {% if brand.logo %}
-                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy">
+                    <div class="brand-logo-frame">
+                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy">
+                    </div>
                 {% endif %}
                 <dl>
                     <div>
@@ -49,14 +51,31 @@
     <div class="container content-grid {% if brand.client.is_global_trade %}gt-content-grid{% endif %}">
         <article class="case-narrative brand-narrative">
             {% if brand.client.is_global_trade %}
-                <section class="gt-programs">
+                <section class="gt-programs" data-program-section>
                     <div class="gt-programs-header">
-                        <p class="eyebrow">Execution</p>
-                        <h2>Program work history</h2>
+                        <div>
+                            <p class="eyebrow">Execution</p>
+                            <h2>Program work history</h2>
+                        </div>
+                        {% if programs %}
+                            <div class="program-carousel-controls" aria-label="Program carousel controls">
+                                <span class="program-carousel-status" data-program-status aria-live="polite">
+                                    Program 1 of {{ programs|length }}
+                                </span>
+                                <div>
+                                    <button class="program-carousel-btn" type="button" data-program-prev aria-label="Previous program">
+                                        &#8592;
+                                    </button>
+                                    <button class="program-carousel-btn" type="button" data-program-next aria-label="Next program">
+                                        &#8594;
+                                    </button>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
 
                     {% if programs %}
-                        <div class="program-carousel" aria-label="{{ brand.name }} execution programs">
+                        <div class="program-carousel" data-program-carousel aria-label="{{ brand.name }} execution programs">
                             {% for program in programs %}
                                 <article class="program-card">
                                     <div class="program-card-top">
