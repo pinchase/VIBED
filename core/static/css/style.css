@@ -1068,15 +1068,17 @@ blockquote {
     padding: 1rem;
 }
 
-.program-mini-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.program-detail-stack {
+    display: flex;
+    flex-direction: column;
     gap: 0.9rem;
-    align-items: stretch;
+}
+
+.program-detail-stack .program-overview {
+    margin-bottom: 0;
 }
 
 .program-mini-card {
-    min-height: 180px;
     padding: 1rem;
     transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
 }
@@ -1490,14 +1492,6 @@ blockquote {
         margin: 0 -1.15rem -0.5rem;
         padding: 0 1.15rem 0.5rem;
         scroll-padding-inline: 1.15rem;
-    }
-
-    .program-mini-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .program-mini-card {
-        min-height: 0;
     }
 
     .lightbox-nav {
