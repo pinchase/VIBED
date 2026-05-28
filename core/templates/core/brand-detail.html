@@ -159,19 +159,9 @@
                     </section>
                 {% endif %}
 
-                {% if brand.execution %}
-                    <section class="story-block story-feature">
-                        <span>02</span>
-                        <div>
-                            <h2>Execution</h2>
-                            <p>{{ brand.execution }}</p>
-                        </div>
-                    </section>
-                {% endif %}
-
                 {% if brand.outcome %}
                     <section class="story-block story-feature">
-                        <span>03</span>
+                        <span>{% if brand.objective %}02{% else %}01{% endif %}</span>
                         <div>
                             <h2>Outcome</h2>
                             <p>{{ brand.outcome }}</p>

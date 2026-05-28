@@ -74,7 +74,6 @@ class Brand(models.Model):
     logo = models.ImageField(upload_to='brand_logos/')
     caption = models.TextField(blank=True, help_text="Short brand summary shown on client pages")
     objective = models.TextField(blank=True, help_text="Brand objective or campaign brief")
-    # execution = models.TextField(blank=True, help_text="How the brand work was executed")
     outcome = models.TextField(blank=True, help_text="Outcome or achievement from the brand work")
     order = models.PositiveIntegerField(default=0, help_text="Display priority order")
     is_active = models.BooleanField(default=True)
@@ -130,80 +129,6 @@ class BrandImage(models.Model):
 
     def __str__(self):
         return f"{self.brand.name} - Image {self.order}"
-
-
-class Project(models.Model):
-    title = models.CharField(
-        max_length=200,
-        help_text="Project title (e.g., 'Dettol Campaign')"
-    )
-    slug = models.SlugField(
-        unique=True,
-        max_length=200,
-        help_text="URL slug (auto-generated if not provided)"
-    )
-    brand = models.ForeignKey(
-        Brand,
-        on_delete=models.PROTECT,
-        related_name='projects',
-        help_text="Brand this project is associated with"
-    )
-    objective = models.TextField(
-        help_text="Project objective and goals"
-    )
-    mechanisms = models.TextField(
-        help_text="How the project was executed"
-    )
-    achievement = models.TextField(
-        help_text="Results and achievements"
-    )
-    featured = models.BooleanField(
-        default=False,
-        help_text="Display on homepage"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        verbose_name = "Project"
-        verbose_name_plural = "Projects"
-
-    def __str__(self):
-        return self.title
-
-    def save(self, *args, **kwargs):
-        """Auto-generate slug from title if not provided"""
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
-
-
-class ProjectImage(models.Model):
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.CASCADE,
-        related_name='images'
-    )
-    image = models.ImageField(upload_to='project_images/')
-    caption = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
-    order = models.PositiveIntegerField(
-        default=0,
-        help_text="Display order in gallery"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['order', 'created_at']
-        verbose_name = "Project Image"
-        verbose_name_plural = "Project Images"
-
-    def __str__(self):
-        return f"{self.project.title} - Image {self.order}"
 
 
 class Testimonial(models.Model):

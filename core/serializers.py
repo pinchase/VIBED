@@ -2,13 +2,6 @@ from rest_framework import serializers
 from .models import Client, Brand, BrandProgram, BrandImage, Testimonial
 
 
-# class ProjectImageSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ProjectImage
-#         fields = ['id', 'image', 'caption', 'order', 'created_at']
-#         read_only_fields = ['id', 'created_at']
-
-
 class BrandImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BrandImage
@@ -60,37 +53,11 @@ class BrandDetailSerializer(serializers.ModelSerializer):
         model = Brand
         fields = [
             'id', 'client', 'name', 'slug', 'logo', 'caption',
-            'objective', 'execution', 'outcome', 'programs', 'images', 'order',
+            'objective', 'outcome', 'programs', 'images', 'order',
             'is_active', 'created_at'
         ]
         read_only_fields = ['id', 'created_at']
 
-
-# class ProjectListSerializer(serializers.ModelSerializer):
-#     brand = BrandSerializer(read_only=True)
-#     brand_logo = serializers.ImageField(source='brand.logo', read_only=True)
-#     client_name = serializers.CharField(source='brand.client.name', read_only=True)
-#
-#     class Meta:
-#         model = Project
-#         fields = ['id', 'title', 'slug', 'brand', 'client_name', 'brand_logo', 'featured']
-#         read_only_fields = ['id']
-
-
-# class ProjectDetailSerializer(serializers.ModelSerializer):
-#     images = ProjectImageSerializer(many=True, read_only=True)
-#     brand = BrandDetailSerializer(read_only=True)
-#     brand_logo = serializers.ImageField(source='brand.logo', read_only=True)
-#     client_name = serializers.CharField(source='brand.client.name', read_only=True)
-
-#     class Meta:
-#         model = Project
-#         fields = [
-#             'id', 'title', 'slug', 'brand', 'client_name', 'brand_logo',
-#             'objective', 'mechanisms', 'achievement', 'featured',
-#             'images', 'created_at', 'updated_at'
-#         ]
-#         read_only_fields = ['id', 'created_at', 'updated_at']
 
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:

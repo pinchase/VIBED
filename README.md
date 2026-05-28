@@ -33,7 +33,6 @@ Primary content models:
 - `BrandProgram`: program-level details for brand execution work.
 - `BrandImage`: gallery images for brand detail pages.
 - `Testimonial`: public testimonial content.
-- `Project` and `ProjectImage`: legacy models retained in the codebase.
 
 ## Main Routes
 

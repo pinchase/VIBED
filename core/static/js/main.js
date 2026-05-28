@@ -110,8 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
 
     const revealTargets = document.querySelectorAll(
-        ".section, .feature-card, .value-card, .project-card, " +
-        ".testimonial-card, .client-card, .step-card, .stat-item, " +
+        ".section, .feature-card, .value-card, .testimonial-card, " +
+        ".client-card, .step-card, .stat-item, " +
         ".story-block, .expertise-list > div"
     );
     revealTargets.forEach((el) => {
