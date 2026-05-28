@@ -18,7 +18,7 @@ from core.views import (
     ContactPageView,
 )
 
-# Template Views (HTML pages)
+
 template_patterns = [
     path('', HomePageView.as_view(), name='home'),
     path('clients/', ClientsListView.as_view(), name='clients'),

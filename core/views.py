@@ -16,11 +16,7 @@ class TestimonialListView(generics.ListAPIView):
     ordering = ['-created_at']
 
 
-# ============ TEMPLATE VIEWS ============
-
 class HomePageView(View):
-    """Homepage with clients, testimonials, and route-to-market positioning."""
-    
     def get(self, request):
         testimonials = Testimonial.objects.filter(featured=True).order_by('-created_at')[:3]
         clients = Client.objects.filter(is_active=True).order_by('name')
@@ -34,8 +30,6 @@ class HomePageView(View):
 
 
 class ClientsListView(View):
-    """Public clients page with logos and company captions."""
-
     def get(self, request):
         clients = Client.objects.filter(is_active=True).order_by('name')
 
@@ -47,8 +41,6 @@ class ClientsListView(View):
 
 
 class ClientDetailView(View):
-    """Client-level work story with its brand portfolio."""
-
     def get(self, request, slug):
         client = get_object_or_404(Client, slug=slug, is_active=True)
         brands = client.brands.filter(is_active=True).order_by('order', 'name')
@@ -64,8 +56,6 @@ class ClientDetailView(View):
 
 
 class BrandDetailView(View):
-    """Brand-level work page with narrative and image gallery."""
-
     def get(self, request, slug):
         brand = get_object_or_404(
             Brand.objects.select_related('client'),
@@ -87,9 +77,7 @@ class BrandDetailView(View):
         return render(request, 'core/brand-detail.html', context)
 
 
-class TestimonialsPageView(View):
-    """Testimonials listing page"""
-    
+class TestimonialsPageView(View):    
     def get(self, request):
         testimonials = Testimonial.objects.all()
         paginator = Paginator(testimonials, 12)
@@ -110,8 +98,6 @@ class TestimonialsPageView(View):
 
 
 class AboutPageView(View):
-    """About page"""
-    
     def get(self, request):
         context = {
             'page_title': 'About - Braymell',
@@ -119,9 +105,7 @@ class AboutPageView(View):
         return render(request, 'core/about.html', context)
 
 
-class ContactPageView(View):
-    """Contact page"""
-    
+class ContactPageView(View):    
     def get(self, request):
         context = {
             'page_title': 'Contact - Braymell',
