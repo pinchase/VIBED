@@ -190,7 +190,7 @@ JAZZMIN_SETTINGS = {
     "login_logo": "images/logo.jpeg",
     "site_icon": "images/logo.jpeg",
 
-    "search_model": "core.Project",
+    "search_model": "core.Client",
 
     "user_avatar": None,
 
@@ -231,10 +231,9 @@ JAZZMIN_SETTINGS = {
 
     "related_modal_active": True,
 
-    "changeform_format": "single",
+    "changeform_format": "collapsible",
 
     "changeform_format_overrides": {
-        "core.project": "collapsible",
         "auth.user": "horizontal_tabs",
         "core.brandprogram": "collapsible",
     },

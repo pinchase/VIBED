@@ -6,6 +6,19 @@ admin.site.site_header = "Braymells Admin Portal"
 admin.site.site_title = "Braymells Dashboard"
 admin.site.index_title = "Welcome to Braymells Administration"
 
+
+class ActiveStatusAdminMixin:
+    actions = ['mark_active', 'mark_inactive']
+
+    @admin.action(description="Mark selected as active")
+    def mark_active(self, request, queryset):
+        queryset.update(is_active=True)
+
+    @admin.action(description="Mark selected as inactive")
+    def mark_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+
+
 class BrandInline(admin.TabularInline):
     model = Brand
     extra = 1
@@ -14,16 +27,16 @@ class BrandInline(admin.TabularInline):
 
     
 @admin.register(Client)
-class ClientAdmin(admin.ModelAdmin):
+class ClientAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     list_display = ['name', 'channel', 'logo_preview', 'caption', 'is_active', 'created_at']
     list_filter = ['channel', 'is_active', 'created_at']
     search_fields = ['name', 'caption', 'description', 'work_done']
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['logo_preview', 'created_at', 'updated_at']
     inlines = [BrandInline]
     fieldsets = (
         ('Client Information', {
-            'fields': ('name', 'slug', 'channel', 'logo', 'caption', 'description')
+            'fields': ('name', 'slug', 'channel', 'logo', 'logo_preview', 'caption', 'description')
         }),
         ('Client Work Story', {
             'fields': ('objective', 'stores_activated', 'team_size', 'work_done', 'achievement')
@@ -66,16 +79,18 @@ class BrandProgramInline(admin.StackedInline):
 
 
 @admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
+class BrandAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     list_display = ['name', 'client', 'client_channel', 'logo_preview', 'order', 'is_active', 'created_at']
     list_filter = ['client__channel', 'client', 'is_active', 'created_at']
     search_fields = ['name', 'caption', 'client__name']
+    autocomplete_fields = ['client']
+    prepopulated_fields = {'slug': ('name',)}
     ordering = ['order', 'name']
-    readonly_fields = ['created_at']
+    readonly_fields = ['logo_preview', 'created_at']
     inlines = [BrandProgramInline, BrandImageInline]
     fieldsets = (
         ('Brand Information', {
-            'fields': ('client', 'name', 'slug', 'logo', 'caption')
+            'fields': ('client', 'name', 'slug', 'logo', 'logo_preview', 'caption')
         }),
         ('Brand Work Story', {
             'fields': ('objective', 'outcome')
@@ -105,10 +120,11 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 @admin.register(BrandProgram)
-class BrandProgramAdmin(admin.ModelAdmin):
+class BrandProgramAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     list_display = ['title', 'brand', 'client_name', 'order', 'is_active', 'created_at']
     list_filter = ['is_active', 'brand__client', 'brand', 'created_at']
     search_fields = ['title', 'brand__name', 'brand__client__name', 'program_plan', 'customer_reach']
+    autocomplete_fields = ['brand']
     ordering = ['brand', 'order', 'title']
     readonly_fields = ['created_at']
     fieldsets = (
@@ -135,11 +151,31 @@ class BrandProgramAdmin(admin.ModelAdmin):
 
 @admin.register(BrandImage)
 class BrandImageAdmin(admin.ModelAdmin):
-    list_display = ['brand', 'order', 'caption', 'created_at']
+    list_display = ['brand', 'image_preview', 'order', 'caption', 'created_at']
     list_filter = ['created_at', 'brand__client', 'brand']
     search_fields = ['brand__name', 'brand__client__name', 'caption']
+    autocomplete_fields = ['brand']
     ordering = ['brand', 'order']
-    readonly_fields = ['created_at']
+    readonly_fields = ['image_preview', 'created_at']
+    fieldsets = (
+        ('Image Information', {
+            'fields': ('brand', 'image', 'image_preview', 'caption', 'order')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="72" height="72" style="object-fit:cover;border-radius:8px;" />',
+                obj.image.url
+            )
+        return "No Image"
+
+    image_preview.short_description = "Image Preview"
 
 
 
@@ -187,10 +223,10 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_display = ['client_name', 'company', 'image_preview','rating', 'featured', 'created_at']
     list_filter = ['featured', 'rating', 'created_at']
     search_fields = ['client_name', 'company', 'message']
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['image_preview', 'created_at', 'updated_at']
     fieldsets = (
         ('Client Information', {
-            'fields': ('client_name', 'company', 'position', 'image')
+            'fields': ('client_name', 'company', 'position', 'image', 'image_preview')
         }),
         ('Testimonial', {
             'fields': ('message', 'rating')
