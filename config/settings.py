@@ -208,9 +208,6 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-user-shield",
         "auth.user": "fas fa-user",
 
-        "core.project": "fas fa-briefcase",
-        "core.projectimage": "fas fa-images",
-
         "core.testimonial": "fas fa-comment-dots",
         "core.clientlogo": "fas fa-handshake",
 

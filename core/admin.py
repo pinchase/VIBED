@@ -21,7 +21,7 @@ class ActiveStatusAdminMixin:
 
 class BrandInline(admin.TabularInline):
     model = Brand
-    extra = 1
+    extra = 0
     fields = ['name', 'logo', 'caption', 'order', 'is_active']
     ordering = ['order']
 
@@ -33,6 +33,7 @@ class ClientAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     search_fields = ['name', 'caption', 'description', 'work_done']
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['logo_preview', 'created_at', 'updated_at']
+    date_hierarchy = 'created_at'
     inlines = [BrandInline]
     fieldsets = (
         ('Client Information', {
@@ -63,14 +64,25 @@ class ClientAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
 
 class BrandImageInline(admin.TabularInline):
     model = BrandImage
-    extra = 1
-    fields = ['image', 'caption', 'order']
+    extra = 0
+    fields = ['image', 'image_preview', 'caption', 'order']
+    readonly_fields = ['image_preview']
     ordering = ['order']
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="64" height="64" style="object-fit:cover;border-radius:8px;" />',
+                obj.image.url
+            )
+        return "No Image"
+
+    image_preview.short_description = "Preview"
 
 
 class BrandProgramInline(admin.StackedInline):
     model = BrandProgram
-    extra = 1
+    extra = 0
     fields = [
         'title', 'program_plan', 'customer_reach', 'objective',
         'execution_strategy', 'achievement', 'order', 'is_active'
@@ -85,8 +97,10 @@ class BrandAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     search_fields = ['name', 'caption', 'client__name']
     autocomplete_fields = ['client']
     prepopulated_fields = {'slug': ('name',)}
+    list_editable = ['order', 'is_active']
     ordering = ['order', 'name']
     readonly_fields = ['logo_preview', 'created_at']
+    date_hierarchy = 'created_at'
     inlines = [BrandProgramInline, BrandImageInline]
     fieldsets = (
         ('Brand Information', {
@@ -123,10 +137,15 @@ class BrandAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
 class BrandProgramAdmin(ActiveStatusAdminMixin, admin.ModelAdmin):
     list_display = ['title', 'brand', 'client_name', 'order', 'is_active', 'created_at']
     list_filter = ['is_active', 'brand__client', 'brand', 'created_at']
-    search_fields = ['title', 'brand__name', 'brand__client__name', 'program_plan', 'customer_reach']
+    search_fields = [
+        'title', 'brand__name', 'brand__client__name', 'program_plan',
+        'customer_reach', 'objective', 'execution_strategy', 'achievement'
+    ]
     autocomplete_fields = ['brand']
+    list_editable = ['order', 'is_active']
     ordering = ['brand', 'order', 'title']
     readonly_fields = ['created_at']
+    date_hierarchy = 'created_at'
     fieldsets = (
         ('Program Information', {
             'fields': ('brand', 'title')
@@ -157,6 +176,7 @@ class BrandImageAdmin(admin.ModelAdmin):
     autocomplete_fields = ['brand']
     ordering = ['brand', 'order']
     readonly_fields = ['image_preview', 'created_at']
+    date_hierarchy = 'created_at'
     fieldsets = (
         ('Image Information', {
             'fields': ('brand', 'image', 'image_preview', 'caption', 'order')
@@ -177,53 +197,13 @@ class BrandImageAdmin(admin.ModelAdmin):
 
     image_preview.short_description = "Image Preview"
 
-
-
-# @admin.register(Project)
-# class ProjectAdmin(admin.ModelAdmin):
-#     list_display = ['title', 'get_brand_display', 'featured', 'created_at']
-#     list_filter = ['featured', 'brand__client', 'brand', 'created_at']
-#     search_fields = ['title', 'brand__name', 'brand__client__name']
-#     prepopulated_fields = {'slug': ('title',)}
-#     readonly_fields = ['created_at', 'updated_at']
-#     inlines = [ProjectImageInline]
-#     fieldsets = (
-#         ('Basic Information', {
-#             'fields': ('title', 'slug', 'brand')
-#         }),
-#         ('Project Details', {
-#             'fields': ('objective', 'mechanisms', 'achievement')
-#         }),
-#         ('Display Settings', {
-#             'fields': ('featured',)
-#         }),
-#         ('Timestamps', {
-#             'fields': ('created_at', 'updated_at'),
-#             'classes': ('collapse',)
-#         }),
-#     )
-    
-#     def get_brand_display(self, obj):
-#         """Display brand with client info in list view"""
-#         return str(obj.brand)
-#     get_brand_display.short_description = 'Brand'
-
-
-# @admin.register(ProjectImage)
-# class ProjectImageAdmin(admin.ModelAdmin):
-#     list_display = ['project', 'order', 'caption', 'created_at']
-#     list_filter = ['created_at', 'project']
-#     search_fields = ['project__title', 'caption']
-#     ordering = ['project', 'order']
-#     readonly_fields = ['created_at']
-
-
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
     list_display = ['client_name', 'company', 'image_preview','rating', 'featured', 'created_at']
     list_filter = ['featured', 'rating', 'created_at']
     search_fields = ['client_name', 'company', 'message']
     readonly_fields = ['image_preview', 'created_at', 'updated_at']
+    date_hierarchy = 'created_at'
     fieldsets = (
         ('Client Information', {
             'fields': ('client_name', 'company', 'position', 'image', 'image_preview')
